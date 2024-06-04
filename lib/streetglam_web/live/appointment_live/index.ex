@@ -6,7 +6,9 @@ defmodule StreetglamWeb.AppointmentLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :appointments, Services.list_appointments())}
+    appointments = Services.list_appointments()
+    IO.inspect(appointments)
+    {:ok, stream(socket, :appointments, appointments)}
   end
 
   @impl true
@@ -18,12 +20,6 @@ defmodule StreetglamWeb.AppointmentLive.Index do
     socket
     |> assign(:page_title, "Edit Appointment")
     |> assign(:appointment, Services.get_appointment!(id))
-  end
-
-  defp apply_action(socket, :new, _params) do
-    socket
-    |> assign(:page_title, "New Appointment")
-    |> assign(:appointment, %Appointment{})
   end
 
   defp apply_action(socket, :index, _params) do

@@ -21,6 +21,8 @@ defmodule StreetglamWeb.OfferLive.Index do
   end
 
   defp apply_action(socket, :new, _params) do
+    IO.inspect(socket.assigns.streams.offers)
+
     socket
     |> assign(:page_title, "New Offer")
     |> assign(:offer, %Offer{})

@@ -2,6 +2,8 @@ defmodule Streetglam.Services.Offer do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "offers" do
     field :description, :string
     field :name, :string

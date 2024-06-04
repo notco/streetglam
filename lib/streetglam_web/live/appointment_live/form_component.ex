@@ -9,7 +9,7 @@ defmodule StreetglamWeb.AppointmentLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage appointment records in your database.</:subtitle>
+        <:subtitle></:subtitle>
       </.header>
 
       <.simple_form
@@ -19,9 +19,10 @@ defmodule StreetglamWeb.AppointmentLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:schedule]} type="datetime-local" label="Schedule" />
-        <.input field={@form[:contact]} type="text" label="Contact" />
+        <.input field={@form[:name]} type="text" label="Name" required />
+        <.input field={@form[:schedule]} type="datetime-local" label="Schedule" required />
+        <.input field={@form[:contact]} type="text" label="Contact" required />
+        <.offer_input field={@form[:offer_id]} offers={@offers} />
         <:actions>
           <.button phx-disable-with="Saving...">Save Appointment</.button>
         </:actions>
@@ -38,6 +39,18 @@ defmodule StreetglamWeb.AppointmentLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign_form(changeset)}
+  end
+
+  def offer_input(assigns) do
+    ~H"""
+    <.input
+      field={@field}
+      type="select"
+      label="Service"
+      options={Enum.map(@offers, fn o -> {o.name, o.id} end)}
+      required
+    />
+    """
   end
 
   @impl true
@@ -77,7 +90,7 @@ defmodule StreetglamWeb.AppointmentLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Appointment created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> redirect(to: ~p"/")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}

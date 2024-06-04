@@ -1,0 +1,9 @@
+<.live_component
+  module={StreetglamWeb.AppointmentLive.FormComponent}
+  id={@appointment.id || :new}
+  title={@page_title}
+  action={@live_action}
+  appointment={@appointment}
+  offers={@offers}
+  patch={~p"/appointments/success"}
+/>

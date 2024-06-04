@@ -72,10 +72,15 @@ defmodule StreetglamWeb.Router do
   end
 
   scope "/", StreetglamWeb do
+    pipe_through [:browser]
+    live "/appointments/new", AppointmentLive.New, :new
+    live "/appointments/success", AppointmentLive.New, :success
+  end
+
+  scope "/", StreetglamWeb do
     pipe_through [:browser, :require_authenticated_user]
 
     live "/appointments", AppointmentLive.Index, :index
-    live "/appointments/new", AppointmentLive.Index, :new
     live "/appointments/:id/edit", AppointmentLive.Index, :edit
 
     live "/appointments/:id", AppointmentLive.Show, :show
