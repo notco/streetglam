@@ -1,0 +1,47 @@
+<.header>
+  Listing Offers
+  <:actions>
+    <.link patch={~p"/offers/new"}>
+      <.button>New Offer</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="offers"
+  rows={@streams.offers}
+  row_click={fn {_id, offer} -> JS.navigate(~p"/offers/#{offer}") end}
+>
+  <:col :let={{_id, offer}} label="Name"><%= offer.name %></:col>
+  <:col :let={{_id, offer}} label="Description"><%= offer.description %></:col>
+  <:action :let={{_id, offer}}>
+    <div class="sr-only">
+      <.link navigate={~p"/offers/#{offer}"}>Show</.link>
+    </div>
+    <.link patch={~p"/offers/#{offer}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, offer}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: offer.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="offer-modal"
+  show
+  on_cancel={JS.patch(~p"/offers")}
+>
+  <.live_component
+    module={StreetglamWeb.OfferLive.FormComponent}
+    id={@offer.id || :new}
+    title={@page_title}
+    action={@live_action}
+    offer={@offer}
+    patch={~p"/offers"}
+  />
+</.modal>
