@@ -18,7 +18,7 @@ defmodule Streetglam.Services do
 
   """
   def list_appointments do
-    Repo.all(Appointment)
+    Repo.all(Appointment) |> Repo.preload([:offer])
   end
 
   @doc """
